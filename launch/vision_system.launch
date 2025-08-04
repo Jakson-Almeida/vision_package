@@ -1,0 +1,51 @@
+<launch>
+  <!-- Vision System Launch File -->
+  
+  <!-- USB Camera Node -->
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen">
+    <param name="video_device" value="/dev/video0" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="usb_cam" />
+    <param name="io_method" value="mmap" />
+    <param name="framerate" value="30" />
+  </node>
+  
+  <!-- Parâmetros globais -->
+  <param name="camera_id" value="0" />
+  <param name="show_image" value="false" />
+  
+  <!-- Camera Calibration Node -->
+  <node name="camera_calibration_node" pkg="vision_package" type="camera_calibration_node.py" output="screen">
+    <param name="checkerboard" value="[7, 7]" />
+    <param name="square_size_mm" value="21.25" />
+    <param name="images_path" value="imagens_calibracao" />
+    <param name="perform_calibration" value="false" />
+  </node>
+  
+  <!-- YOLO Detection Node -->
+  <node name="yolo_detection_node" pkg="vision_package" type="yolo_detection_node.py" output="screen">
+    <param name="model_path" value="best.pt" />
+    <param name="confidence_threshold" value="0.25" />
+    <param name="show_image" value="false" />
+  </node>
+  
+  <!-- Template Matching Node -->
+  <node name="template_matching_node" pkg="vision_package" type="template_matching_node.py" output="screen">
+    <param name="template_dir" value="Template" />
+    <param name="algorithm" value="AKAZE" />
+    <param name="min_matches" value="10" />
+    <param name="min_inliers" value="30" />
+    <param name="show_image" value="false" />
+  </node>
+  
+  <!-- Pose Estimation Node -->
+  <node name="pose_estimation_node" pkg="vision_package" type="pose_estimation_node.py" output="screen">
+    <param name="robot_width" value="0.22" />
+    <param name="robot_length" value="0.215" />
+    <param name="camera_height" value="1.5" />
+    <param name="show_image" value="false" />
+  </node>
+  
+</launch> 
